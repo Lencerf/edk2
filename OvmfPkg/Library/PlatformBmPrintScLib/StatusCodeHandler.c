@@ -223,8 +223,9 @@ HandleStatusCode (
       DevPathString,
       ((EFI_RETURN_STATUS_EXTENDED_DATA *)Data)->ReturnStatus
       );
-  }
-
+  }  
+  
+  DEBUG ((DEBUG_INFO, "LYU: UnicodeSPrint: done\n"));
   //
   // Done.
   //

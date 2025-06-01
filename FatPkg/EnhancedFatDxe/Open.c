@@ -41,6 +41,7 @@ FatAllocateIFile (
   IFile->Signature = FAT_IFILE_SIGNATURE;
 
   CopyMem (&(IFile->Handle), &FatFileInterface, sizeof (EFI_FILE_PROTOCOL));
+  DEBUG ((DEBUG_INFO, "LYU: perf: FatAllocateIFile CopyMem:\n"));
 
   //
   // Report the correct revision number based on the DiskIo2 availability
@@ -56,6 +57,7 @@ FatAllocateIFile (
   InitializeListHead (&IFile->Tasks);
 
   *PtrIFile = IFile;
+  DEBUG ((DEBUG_INFO, "LYU: perf:FatAllocateIFile end:\n"));
   return EFI_SUCCESS;
 }
 
@@ -270,6 +272,7 @@ FatOpenEx (
   //
   Status = FatOFileOpen (OFile, &NewIFile, FileName, OpenMode, (UINT8)Attributes);
 
+  DEBUG ((DEBUG_INFO, "LYU: perf:FatOFileOpen: %d\n", Status));
   //
   // If the file was opened, return the handle to the caller
   //
@@ -291,6 +294,7 @@ FatOpenEx (
     }
   }
 
+  DEBUG ((DEBUG_INFO, "LYU: perf:FatOpenEx: %d\n", Status));
   return Status;
 }
 
@@ -323,5 +327,8 @@ FatOpen (
   IN  UINT64             Attributes
   )
 {
-  return FatOpenEx (FHand, NewHandle, FileName, OpenMode, Attributes, NULL);
+  EFI_STATUS s;
+  s = FatOpenEx (FHand, NewHandle, FileName, OpenMode, Attributes, NULL);
+  DEBUG ((DEBUG_INFO, "LYU: perf:FatOpen FatOpenEx: %d\n", s));
+  return s;
 }

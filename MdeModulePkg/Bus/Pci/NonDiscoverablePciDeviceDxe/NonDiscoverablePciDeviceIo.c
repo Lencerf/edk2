@@ -1154,7 +1154,8 @@ NonCoherentPciIoAllocateBuffer (
     //
     MemType = EFI_MEMORY_WC;
   } else {
-    MemType = EFI_MEMORY_UC;
+    MemType = EFI_MEMORY_UC;  
+    DEBUG ((DEBUG_INFO, "LYU: NonCoherentPciIoAllocateBuffer: _EFI_MEMORY_UC:\n"));
   }
 
   Alloc = AllocatePool (sizeof *Alloc);

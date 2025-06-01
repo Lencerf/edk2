@@ -257,7 +257,7 @@ PcRtcInit (
     if (!EfiAtRuntime ()) {
       EfiReleaseLock (&Global->RtcLock);
     }
-
+    DEBUG ((DEBUG_INFO, "LYU: PcRtcInit: 1\n"));
     return EFI_DEVICE_ERROR;
   }
 
@@ -338,6 +338,7 @@ PcRtcInit (
   //
   Status = PcRtcSetTime (&Time, Global);
   if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_INFO, "LYU: PcRtcInit: 2\n"));
     return EFI_DEVICE_ERROR;
   }
 
@@ -382,6 +383,7 @@ PcRtcInit (
       EfiReleaseLock (&Global->RtcLock);
     }
 
+    DEBUG ((DEBUG_INFO, "LYU: PcRtcInit: 3\n"));
     return EFI_DEVICE_ERROR;
   }
 
@@ -402,6 +404,7 @@ PcRtcInit (
       EfiReleaseLock (&Global->RtcLock);
     }
 
+    DEBUG ((DEBUG_INFO, "LYU: PcRtcInit: 4\n"));
     return EFI_DEVICE_ERROR;
   }
 

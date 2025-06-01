@@ -177,6 +177,7 @@ MarkIoMemoryRangeForRuntimeAccess (
                   Length,
                   EFI_MEMORY_UC | EFI_MEMORY_RUNTIME
                   );
+  DEBUG ((DEBUG_INFO, "LYU: MarkIoMemoryRangeForRuntimeAccess: _EFI_MEMORY_UC:\n"));
   ASSERT_EFI_ERROR (Status);
 
   Status = gDS->AllocateMemorySpace (

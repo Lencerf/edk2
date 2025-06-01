@@ -33,6 +33,7 @@ ReserveResourceInGcd (
   EFI_STATUS  Status;
 
   if (IsMMIO) {
+    DEBUG ((DEBUG_INFO, "LYU: ReserveResourceInGcd: _EFI_MEMORY_UC:\n"));
     Status = gDS->AddMemorySpace (
                     GcdType,
                     BaseAddress,

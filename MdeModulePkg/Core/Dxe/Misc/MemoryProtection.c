@@ -194,13 +194,19 @@ SetUefiImageMemoryAttributes (
   EFI_STATUS                       Status;
   EFI_GCD_MEMORY_SPACE_DESCRIPTOR  Descriptor;
   UINT64                           FinalAttributes;
+  // UINT64 last;
 
   Status = CoreGetMemorySpaceDescriptor (BaseAddress, &Descriptor);
   ASSERT_EFI_ERROR (Status);
 
+  DEBUG ((DEBUG_INFO, "SetUefiImageMemoryAttributes - Descriptor.Attributes=%x Attributes=%x \n", Descriptor.Attributes, Attributes));
+
   FinalAttributes = (Descriptor.Attributes & EFI_CACHE_ATTRIBUTE_MASK) | (Attributes & EFI_MEMORY_ATTRIBUTE_MASK);
 
   DEBUG ((DEBUG_INFO, "SetUefiImageMemoryAttributes - 0x%016lx - 0x%016lx (0x%016lx)\n", BaseAddress, Length, FinalAttributes));
+  // last = FinalAttributes & 1;
+  // ASSERT (last != 1);
+  // ASSERT (BaseAddress != 0x3F8DC000);
 
   ASSERT (gCpu != NULL);
   gCpu->SetMemoryAttributes (gCpu, BaseAddress, Length, FinalAttributes);
@@ -386,10 +392,12 @@ ProtectUefiImage (
   DEBUG ((DEBUG_INFO, "ProtectUefiImageCommon - 0x%x\n", LoadedImage));
   DEBUG ((DEBUG_INFO, "  - 0x%016lx - 0x%016lx\n", (EFI_PHYSICAL_ADDRESS)(UINTN)LoadedImage->ImageBase, LoadedImage->ImageSize));
 
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: gCpu=%d\n", gCpu));
   if (gCpu == NULL) {
     return;
   }
 
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: ProtectionPolicy=%d\n", ProtectionPolicy));
   ProtectionPolicy = GetUefiImageProtectionPolicy (LoadedImage, LoadedImageDevicePath);
   switch (ProtectionPolicy) {
     case DO_NOT_PROTECT:
@@ -402,6 +410,7 @@ ProtectUefiImage (
   }
 
   ImageRecord = AllocateZeroPool (sizeof (*ImageRecord));
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: ImageRecord=%d\n", ImageRecord));
   if (ImageRecord == NULL) {
     return;
   }
@@ -411,6 +420,7 @@ ProtectUefiImage (
   //
   // Step 1: record whole region
   //
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: 1\n"));
   ImageRecord->ImageBase = (EFI_PHYSICAL_ADDRESS)(UINTN)LoadedImage->ImageBase;
   ImageRecord->ImageSize = LoadedImage->ImageSize;
 
@@ -460,6 +470,7 @@ ProtectUefiImage (
 
     goto Finish;
   }
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: 4\n"));
 
   Section = (EFI_IMAGE_SECTION_HEADER *)(
                                          (UINT8 *)(UINTN)ImageAddress +
@@ -507,6 +518,7 @@ ProtectUefiImage (
       //
       // Step 2: record code section
       //
+      DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: 2\n"));
       ImageRecordCodeSection = AllocatePool (sizeof (*ImageRecordCodeSection));
       if (ImageRecordCodeSection == NULL) {
         return;
@@ -523,6 +535,7 @@ ProtectUefiImage (
       ImageRecord->CodeSegmentCount++;
     }
   }
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: 3\n"));
 
   if (ImageRecord->CodeSegmentCount == 0) {
     //
@@ -571,6 +584,7 @@ ProtectUefiImage (
   InsertTailList (&mProtectedImageRecordList, &ImageRecord->Link);
 
 Finish:
+  DEBUG ((DEBUG_INFO, "LYU: ProtectUefiImage: done\n"));
   return;
 }
 

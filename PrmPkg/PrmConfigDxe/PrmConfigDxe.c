@@ -120,6 +120,7 @@ SetRuntimeMemoryRangeAttributes (
                       (UINT64)RuntimeMmioRanges->Range[Index].Length,
                       EFI_MEMORY_UC | EFI_MEMORY_RUNTIME
                       );
+      DEBUG ((DEBUG_INFO, "LYU: SetRuntimeMemoryRangeAttributes: _EFI_MEMORY_UC:\n"));
       ASSERT_EFI_ERROR (Status);
 
       Status = gDS->AllocateMemorySpace (

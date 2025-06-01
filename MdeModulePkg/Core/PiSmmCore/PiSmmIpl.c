@@ -1831,6 +1831,7 @@ SmmIplEntry (
                                mSmramCacheSize,
                                EFI_MEMORY_UC
                                );
+        DEBUG ((DEBUG_INFO, "LYU: SmmIplEntry: _EFI_MEMORY_UC:\n"));
         if (EFI_ERROR (SetAttrStatus)) {
           DEBUG ((DEBUG_WARN, "SMM IPL failed to reset SMRAM window to EFI_MEMORY_UC\n"));
         }

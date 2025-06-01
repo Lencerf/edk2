@@ -2853,6 +2853,7 @@ MtrrGetAllMtrrs (
 
   MtrrDefType = (MSR_IA32_MTRR_DEF_TYPE_REGISTER *)&MtrrSetting->MtrrDefType;
   if (!MtrrLibIsMtrrSupported (&FixedMtrrSupported, &VariableMtrrCount)) {
+    DEBUG ((DEBUG_INFO, "LYU: MtrrGetAllMtrrs not supported = %p, type=%x\n", MtrrSetting, MtrrDefType));
     return MtrrSetting;
   }
 
@@ -2860,6 +2861,7 @@ MtrrGetAllMtrrs (
   // Get MTRR_DEF_TYPE value
   //
   MtrrDefType->Uint64 = AsmReadMsr64 (MSR_IA32_MTRR_DEF_TYPE);
+  DEBUG ((DEBUG_INFO, "LYU: MtrrGetAllMtrrs MtrrDefType->Uint64=%x\n", MtrrDefType->Uint64));
 
   //
   // Enabling the Fixed MTRR bit when unsupported is not allowed.
@@ -3001,6 +3003,8 @@ MtrrGetMemoryAttributesInMtrrSettings (
     return RETURN_INVALID_PARAMETER;
   }
 
+  DEBUG ((DEBUG_INFO, "LYU: MtrrSetting = %p\n", MtrrSetting));
+
   if (MtrrSetting != NULL) {
     Mtrrs = MtrrSetting;
   } else {
@@ -3015,6 +3019,7 @@ MtrrGetMemoryAttributesInMtrrSettings (
   LocalRanges[0].BaseAddress = 0;
   LocalRanges[0].Length      = MtrrValidBitsMask + 1;
 
+  DEBUG ((DEBUG_INFO, "LYU: MtrrDefType->Bits.E = %d\n", MtrrDefType->Bits.E));
   if (MtrrDefType->Bits.E == 0) {
     LocalRanges[0].Type = CacheUncacheable;
   } else {

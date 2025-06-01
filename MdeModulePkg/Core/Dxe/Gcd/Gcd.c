@@ -678,6 +678,7 @@ ConverToCpuArchAttributes (
   CpuArchAttributes = Attributes & EFI_MEMORY_ATTRIBUTE_MASK;
 
   if ((Attributes & EFI_MEMORY_UC) == EFI_MEMORY_UC) {
+    DEBUG ((DEBUG_INFO, "LYU: ConverToCpuArchAttributes: _EFI_MEMORY_UC:\n"));
     CpuArchAttributes |= EFI_MEMORY_UC;
   } else if ((Attributes & EFI_MEMORY_WC) == EFI_MEMORY_WC) {
     CpuArchAttributes |= EFI_MEMORY_WC;
@@ -738,6 +739,8 @@ CoreConvertSpace (
   LIST_ENTRY         *StartLink;
   LIST_ENTRY         *EndLink;
   UINT64             CpuArchAttributes;
+
+  DEBUG ((DEBUG_INFO, "CLYU input  Attributes = %x\n", Attributes));
 
   if (Length == 0) {
     DEBUG ((DEBUG_GCD, "  Status = %r\n", EFI_INVALID_PARAMETER));
@@ -1670,6 +1673,7 @@ CoreSetMemorySpaceAttributes (
 {
   DEBUG ((DEBUG_GCD, "GCD:SetMemorySpaceAttributes(Base=%016lx,Length=%016lx)\n", BaseAddress, Length));
   DEBUG ((DEBUG_GCD, "  Attributes  = %016lx\n", Attributes));
+  DEBUG ((DEBUG_INFO, " CoreSetMemorySpaceAttributes =%x\n", Attributes));
 
   return CoreConvertSpace (GCD_SET_ATTRIBUTES_MEMORY_OPERATION, (EFI_GCD_MEMORY_TYPE)0, (EFI_GCD_IO_TYPE)0, BaseAddress, Length, 0, Attributes);
 }

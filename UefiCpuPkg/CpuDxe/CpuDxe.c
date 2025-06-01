@@ -451,6 +451,7 @@ GetMemorySpaceAttributeFromMtrrType (
 {
   switch (Type) {
     case CacheUncacheable:
+      DEBUG ((DEBUG_INFO, "LYU: GetMemorySpaceAttributeFromMtrrType: _EFI_MEMORY_UC:\n"));
       return EFI_MEMORY_UC;
     case CacheWriteCombining:
       return EFI_MEMORY_WC;
@@ -637,6 +638,7 @@ RefreshMemoryAttributesFromMtrr (
   ASSERT_RETURN_ERROR (ReturnStatus);
 
   for (Index = 0; Index < RangeCount; Index++) {
+    DEBUG ((DEBUG_INFO, "LYU: RefreshMemoryAttributesFromMtrr: index=%d, type=%x, addr=%x:\n", Index, Ranges[Index].Type, Ranges[Index].BaseAddress));
     SetGcdMemorySpaceAttributes (
       MemorySpaceMap,
       NumberOfDescriptors,
@@ -954,6 +956,7 @@ AddLocalApicMemorySpace (
   EFI_PHYSICAL_ADDRESS  BaseAddress;
 
   BaseAddress = (EFI_PHYSICAL_ADDRESS)GetLocalApicBaseAddress ();
+  DEBUG ((DEBUG_INFO, "LYU: AddLocalApicMemorySpace: _EFI_MEMORY_UC:\n"));
   Status      = AddMemoryMappedIoSpace (BaseAddress, SIZE_4KB, EFI_MEMORY_UC);
   ASSERT_EFI_ERROR (Status);
 

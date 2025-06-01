@@ -57,6 +57,7 @@ MapGcdMmioSpace (
                   Size,
                   EFI_MEMORY_UC
                   );
+  DEBUG ((DEBUG_INFO, "LYU: MapGcdMmioSpace: _EFI_MEMORY_UC:\n"));
   if (EFI_ERROR (Status)) {
     DEBUG ((
       DEBUG_ERROR,
@@ -69,6 +70,7 @@ MapGcdMmioSpace (
   }
 
   Status = gDS->SetMemorySpaceAttributes (Base, Size, EFI_MEMORY_UC);
+  DEBUG ((DEBUG_INFO, "LYU: MapGcdMmioSpace: _EFI_MEMORY_UC:\n"));
   if (EFI_ERROR (Status)) {
     DEBUG ((
       DEBUG_ERROR,

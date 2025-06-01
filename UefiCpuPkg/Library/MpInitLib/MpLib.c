@@ -523,6 +523,7 @@ CollectProcessorCount (
   //
   CpuMpData->InitFlag = ApInitConfig;
   WakeUpAP (CpuMpData, TRUE, 0, NULL, NULL, TRUE);
+  // DEBUG ((DEBUG_INFO, "LYU: WakeUpAP is done\n"));
   CpuMpData->InitFlag = ApInitDone;
   //
   // When InitFlag == ApInitConfig, WakeUpAP () guarantees all APs are checked in.
@@ -1257,6 +1258,7 @@ WakeUpAP (
     FillExchangeInfoData (CpuMpData);
     SaveLocalApicTimerSetting (CpuMpData);
   }
+  // DEBUG ((DEBUG_INFO, "LYU: FillExchangeInfoData is done\n"));
 
   if (CpuMpData->ApLoopMode == ApInMwaitLoop) {
     //
@@ -1269,6 +1271,7 @@ WakeUpAP (
   ExchangeInfo = CpuMpData->MpCpuExchangeInfo;
 
   if (Broadcast) {
+    // DEBUG ((DEBUG_INFO, "LYU: boradcast: CpuMpData->CpuCount=%d\n", CpuMpData->CpuCount));
     for (Index = 0; Index < CpuMpData->CpuCount; Index++) {
       if (Index != CpuMpData->BspNumber) {
         CpuData = &CpuMpData->CpuData[Index];
@@ -1289,6 +1292,7 @@ WakeUpAP (
         }
       }
     }
+    // DEBUG ((DEBUG_INFO, "LYU: boradcast: loop 1 is done\n"));
 
     if (ResetVectorRequired) {
       //
@@ -1318,6 +1322,9 @@ WakeUpAP (
         }
       }
     }
+    // DEBUG ((DEBUG_INFO, "LYU: boradcast: if (ResetVectorRequired) is done\n"));
+
+    // DEBUG ((DEBUG_INFO, "LYU: CpuMpData->InitFlag=%x, ApInitConfig=%x\n", CpuMpData->InitFlag, ApInitConfig));
 
     if (CpuMpData->InitFlag == ApInitConfig) {
       if (PcdGet32 (PcdCpuBootLogicalProcessorNumber) > 0) {
@@ -1372,13 +1379,17 @@ WakeUpAP (
         //     at timeout. APs that miss the time-out may cause undefined
         //     behavior.
         //
+        // DEBUG ((DEBUG_INFO, "LYU: boradcast: TimedWaitForApFinish...\n"));
         TimedWaitForApFinish (
           CpuMpData,
           PcdGet32 (PcdCpuMaxLogicalProcessorNumber) - 1,
           PcdGet32 (PcdCpuApInitTimeOutInMicroSeconds)
           );
 
+        // DEBUG ((DEBUG_INFO, "LYU: boradcast: TimedWaitForApFinish is done\n"));
+
         while (CpuMpData->MpCpuExchangeInfo->NumApsExecuting != 0) {
+          // DEBUG ((DEBUG_INFO, "LYU: CpuPause  CpuMpData->MpCpuExchangeInfo->NumApsExecuting\n", CpuMpData->MpCpuExchangeInfo->NumApsExecuting));
           CpuPause ();
         }
       }
@@ -1430,6 +1441,8 @@ WakeUpAP (
     //
     WaitApWakeup (CpuData->StartupApSignal);
   }
+
+  // DEBUG ((DEBUG_INFO, "LYU: BIG if block is done\n"));
 
   if (ResetVectorRequired) {
     FreeResetVector (CpuMpData);
@@ -1585,6 +1598,7 @@ CheckTimeout (
 
   Cycle++;
   CurrentTime = GetPerformanceCounter ();
+  // DEBUG ((DEBUG_INFO, "LYU: perf: CurrentTime=%d\n", CurrentTime));
   Delta       = (INT64)(CurrentTime - *PreviousTime);
   if (Start > End) {
     Delta = -Delta;
@@ -1631,6 +1645,12 @@ TimedWaitForApFinish (
                               TimeLimit,
                               &CpuMpData->CurrentTime
                               );
+  
+  // DEBUG ((DEBUG_INFO, "LYU: CurrentTime=%d TotalTime=%d ExpectedTime=%d\n", 
+  // CpuMpData->CurrentTime, CpuMpData->TotalTime, CpuMpData->ExpectedTime));
+
+  // DEBUG ((DEBUG_INFO, "LYU: CpuMpData->FinishedCount=%d FinishedApLimit=%d\n", CpuMpData->FinishedCount, FinishedApLimit));
+
   while (CpuMpData->FinishedCount < FinishedApLimit &&
          !CheckTimeout (
             &CpuMpData->CurrentTime,
@@ -1638,6 +1658,11 @@ TimedWaitForApFinish (
             CpuMpData->ExpectedTime
             ))
   {
+    // DEBUG ((DEBUG_INFO, "LYU: CurrentTime=%d TotalTime=%d ExpectedTime=%d\n", 
+    // CpuMpData->CurrentTime, CpuMpData->TotalTime, CpuMpData->ExpectedTime));
+
+    // DEBUG ((DEBUG_INFO, "LYU: pause CpuMpData->FinishedCount=%d FinishedApLimit=%d\n", CpuMpData->FinishedCount, FinishedApLimit));
+
     CpuPause ();
   }
 

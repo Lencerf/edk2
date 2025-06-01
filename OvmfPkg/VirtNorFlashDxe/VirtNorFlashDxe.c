@@ -396,6 +396,7 @@ NorFlashFvbInitialize (
                   RuntimeMmioRegionSize,
                   EFI_MEMORY_UC | EFI_MEMORY_RUNTIME
                   );
+  DEBUG ((DEBUG_INFO, "LYU: NorFlashFvbInitialize: _EFI_MEMORY_UC:\n"));
   ASSERT_EFI_ERROR (Status);
 
   Status = gDS->SetMemorySpaceAttributes (

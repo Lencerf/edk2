@@ -547,6 +547,7 @@ InitializePciHostBridge (
                    MemApertures[MemApertureIndex]->Limit - MemApertures[MemApertureIndex]->Base + 1,
                    EFI_MEMORY_UC
                    );
+        DEBUG ((DEBUG_INFO, "LYU: InitializePciHostBridge: _EFI_MEMORY_UC:\n"));
         ASSERT_EFI_ERROR (Status);
         Status = gDS->SetMemorySpaceAttributes (
                         HostAddress,

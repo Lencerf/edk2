@@ -129,6 +129,7 @@ GetPerformanceCounter (
   VOID
   )
 {
+  // DEBUG ((DEBUG_INFO, "LYU: perf: OvmfPkg/Library/AcpiTimerLib/AcpiTimerLib.c\n"));
   return (UINT64)InternalAcpiGetTimerTick ();
 }
 
