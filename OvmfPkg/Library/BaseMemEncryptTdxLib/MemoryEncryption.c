@@ -551,10 +551,12 @@ SetOrClearSharedBit (
 
   EndAddress = PhysicalAddress + Length;
   while (RetryCount < MAX_RETRIES_PER_PAGE) {
+    DEBUG((DEBUG_VERBOSE, "%a: mapgpa: PhysicalAddress=%llx Length=%llx, Shared=%d\n", __func__, PhysicalAddress, Length, Mode == SetSharedBit));
     TdStatus = TdVmCall (TDVMCALL_MAPGPA, PhysicalAddress, Length, 0, 0, &MapGpaRetryAddr);
     if (TdStatus != TDVMCALL_STATUS_RETRY) {
       break;
     }
+    DEBUG((DEBUG_VERBOSE, "%a: mapgpa: PhysicalAddress=%llx Length%llx MapGpaRetryAddr=%llx\n", __func__, PhysicalAddress, Length, MapGpaRetryAddr));
 
     DEBUG ((DEBUG_VERBOSE, "%a: TdVmcall(MAPGPA) Retry PhysicalAddress is %llx, MapGpaRetryAddr is %llx\n", __func__, PhysicalAddress, MapGpaRetryAddr));
 

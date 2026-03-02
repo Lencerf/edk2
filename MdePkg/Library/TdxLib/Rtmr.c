@@ -61,6 +61,7 @@ TdExtendRtmr (
   // 48B-extension data. We use ALIGN_POINTER(Pointer, 64) to get
   // the 64B-aligned guest physical address.
   ExtendBuffer = ALIGN_POINTER (mExtendBuffer, 64);
+  DEBUG((DEBUG_VERBOSE, "mExtendBuffer: %p, ExtendBuffer: %p\n", mExtendBuffer, ExtendBuffer));
   ASSERT (((UINTN)ExtendBuffer & 0x3f) == 0);
 
   ZeroMem (ExtendBuffer, SHA384_DIGEST_SIZE);
