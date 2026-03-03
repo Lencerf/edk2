@@ -1908,6 +1908,10 @@ PlatformBootManagerUnableToBoot (
       gEfiCallerBaseName,
       gEfiCallerBaseName
       );
+    // Shutdown QEMU
+    IoWrite16(0x604, 0x2000);
+    // Shutdown Alioth
+    IoWrite8(0x600, 0x34);
     Status = gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &Index);
     ASSERT_EFI_ERROR (Status);
     ASSERT (Index == 0);

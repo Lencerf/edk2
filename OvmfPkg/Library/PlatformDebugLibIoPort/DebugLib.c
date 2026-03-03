@@ -239,6 +239,11 @@ DebugAssert (
     MemDebugLogWrite (Buffer, Length);
   }
 
+  // Shutdown QEMU
+  IoWrite16(0x604, 0x2000);
+  // Shutdown Alioth
+  IoWrite8(0x600, 0x34);
+
   //
   // Generate a Breakpoint, DeadLoop, or NOP based on PCD settings
   //
