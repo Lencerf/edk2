@@ -34,6 +34,7 @@
 #include <Guid/SystemNvDataGuid.h>
 #include <Guid/VariableFormat.h>
 #include <OvmfPlatforms.h>
+#include <IndustryStandard/Alioth.h>
 #include <Library/TdxLib.h>
 #include <Library/MemEncryptSevLib.h>
 
@@ -173,7 +174,9 @@ PlatformMemMapInitialization (
   PlatformGetSystemMemorySizeBelow4gb (PlatformInfoHob);
   PciBase      = PlatformInfoHob->Uc32Base;
   PciExBarBase = 0;
-  if (PlatformInfoHob->HostBridgeDevId == INTEL_Q35_MCH_DEVICE_ID) {
+  if (PlatformInfoHob->HostBridgeDevId == INTEL_Q35_MCH_DEVICE_ID
+      || PlatformInfoHob->HostBridgeDevId == ALIOTH_HOSTBRIDGE_DEVICE_ID
+  ) {
     //
     // The MMCONFIG area is expected to fall between the top of low RAM and
     // the base of the 32-bit PCI host aperture.
@@ -235,6 +238,11 @@ PlatformMemMapInitialization (
     PciIoBase = 0x6000;
     PciIoSize = 0xA000;
     ASSERT ((ICH9_PMBASE_VALUE & 0xF000) < PciIoBase);
+  }
+
+  if (PlatformInfoHob->HostBridgeDevId == ALIOTH_HOSTBRIDGE_DEVICE_ID) {
+      PciIoBase = 0x1000;
+      PciIoSize = 0xF000;
   }
 
   //
@@ -363,6 +371,7 @@ PlatformMiscInitialization (
       AcpiEnBit  = ICH9_ACPI_CNTL_ACPI_EN;
       break;
     case CLOUDHV_DEVICE_ID:
+    case ALIOTH_HOSTBRIDGE_DEVICE_ID:
       break;
     default:
       DEBUG ((

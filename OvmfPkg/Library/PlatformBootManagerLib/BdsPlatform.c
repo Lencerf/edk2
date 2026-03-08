@@ -1365,6 +1365,7 @@ PciAcpiInitialization (
       break;
     case MICROVM_PSEUDO_DEVICE_ID:
     case CLOUDHV_DEVICE_ID:
+    case ALIOTH_HOSTBRIDGE_DEVICE_ID:
       return;
     default:
       if (XenDetected ()) {

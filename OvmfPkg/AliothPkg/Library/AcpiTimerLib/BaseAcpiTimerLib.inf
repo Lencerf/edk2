@@ -1,0 +1,32 @@
+## @file
+#  Base ACPI Timer Library Instance.
+#
+#  Copyright (C) 2014, Gabriel L. Somlo <somlo@cmu.edu>
+#  Copyright (c) 2008 - 2010, Intel Corporation. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION    = 0x00010005
+  BASE_NAME      = BaseAcpiTimerLib
+  FILE_GUID      = FB648CF5-91BE-4737-9023-FD807AC6D96D
+  MODULE_TYPE    = BASE
+  VERSION_STRING = 1.0
+  LIBRARY_CLASS  = TimerLib|PEI_CORE PEIM DXE_CORE SEC DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER UEFI_DRIVER UEFI_APPLICATION SMM_CORE MM_CORE_STANDALONE MM_STANDALONE
+  CONSTRUCTOR    = AcpiTimerLibConstructor
+
+[Sources]
+  AcpiTimerLib.c
+  AcpiTimerLib.h
+  BaseAcpiTimerLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  OvmfPkg/OvmfPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  PciLib
+  IoLib

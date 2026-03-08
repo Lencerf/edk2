@@ -17,6 +17,7 @@ Module Name:
 #include <IndustryStandard/I440FxPiix4.h>
 #include <IndustryStandard/Q35MchIch9.h>
 #include <IndustryStandard/CloudHv.h>
+#include <IndustryStandard/Alioth.h>
 #include <IndustryStandard/Xen/arch-x86/hvm/start_info.h>
 #include <PiPei.h>
 #include <Register/Intel/SmramSaveStateMap.h>
@@ -62,6 +63,12 @@ PlatformQemuUc32BaseInitialization (
     PlatformInfoHob->Uc32Size = CLOUDHV_MMIO_HOLE_SIZE;
     PlatformInfoHob->Uc32Base = CLOUDHV_MMIO_HOLE_ADDRESS;
     return;
+  }
+
+  if (PlatformInfoHob->HostBridgeDevId == ALIOTH_HOSTBRIDGE_DEVICE_ID) {
+      PlatformInfoHob->Uc32Size = ALIOTH_MMIO_32_SIZE;
+      PlatformInfoHob->Uc32Base = ALIOTH_MMIO_32_BASE;
+      return;
   }
 
   ASSERT (
@@ -1316,7 +1323,9 @@ PlatformQemuInitializeRam (
   // gigabyte-alignment being used LowMemory will be 2 or 3 GB and no
   // rounding is needed, so LowMemory and Uc32Base will be identical.
   //
-  if (IsMtrrSupported () && (PlatformInfoHob->HostBridgeDevId != CLOUDHV_DEVICE_ID)) {
+  if (IsMtrrSupported ()
+      && (PlatformInfoHob->HostBridgeDevId != CLOUDHV_DEVICE_ID)
+      && (PlatformInfoHob->HostBridgeDevId != ALIOTH_HOSTBRIDGE_DEVICE_ID)) {
     MtrrGetAllMtrrs (&MtrrSettings);
 
     //

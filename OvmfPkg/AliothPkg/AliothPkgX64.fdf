@@ -3,6 +3,7 @@
 #
 #  Copyright (c) 2006 - 2019, Intel Corporation. All rights reserved.<BR>
 #  (C) Copyright 2016 Hewlett Packard Enterprise Development LP<BR>
+#  Copyright 2026 Google LLC
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -17,7 +18,7 @@
 # Build the variable store and the firmware code as one unified flash device
 # image.
 #
-[FD.OVMF]
+[FD.AVMF]
 BaseAddress   = $(FW_BASE_ADDRESS)
 Size          = $(FW_SIZE)
 ErasePolarity = 1
@@ -36,7 +37,7 @@ FV = SECFV
 # Build the variable store and the firmware code as separate flash device
 # images.
 #
-[FD.OVMF_VARS]
+[FD.AVMF_VARS]
 BaseAddress   = $(FW_BASE_ADDRESS)
 Size          = $(VARS_SIZE)
 ErasePolarity = 1
@@ -45,7 +46,7 @@ NumBlocks     = $(VARS_BLOCKS)
 
 !include OvmfPkg/Include/Fdf/VarStore.fdf.inc
 
-[FD.OVMF_CODE]
+[FD.AVMF_CODE]
 BaseAddress   = $(CODE_BASE_ADDRESS)
 Size          = $(CODE_SIZE)
 ErasePolarity = 1
@@ -270,7 +271,6 @@ INF  MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResour
 
 INF  FatPkg/EnhancedFatDxe/Fat.inf
 INF  MdeModulePkg/Universal/Disk/UdfDxe/UdfDxe.inf
-INF  OvmfPkg/VirtioFsDxe/VirtioFsDxe.inf
 
 INF MdeModulePkg/Logo/LogoDxe.inf
 
