@@ -48,7 +48,7 @@ ResetWarm (
   VOID
   )
 {
-  IoWrite8 (0x64, 0xfe);
+  IoWrite8 (0x604, 0x72);
   CpuDeadLoop ();
 }
 
